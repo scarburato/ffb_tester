@@ -1,10 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 project(ffb_tester)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-
-# Write demo-config.h
-message("Generating header file: ${CMAKE_BINARY_DIR}/demo-config.h")
-set(DEMO_ENABLE_MULTISAMPLE 0 CACHE BOOL "Enable multisample anti-aliasing")
+set (CMAKE_CXX_STANDARD 14)
 
 # Find SDL2
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/modules")

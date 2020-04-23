@@ -15,7 +15,9 @@ static void create_constant(SDL_HapticConstant &effect, std::istream &typer = st
 void create_effect(SDL_Haptic *haptic,uint16_t type, std::istream &typer)
 {
     SDL_HapticEffect effect = {0};
-    int effect_id;
+    int effect_id, iterations;
+
+    //typer >> iterations;
 
     effect.type = type;
 
@@ -52,7 +54,7 @@ void create_effect(SDL_Haptic *haptic,uint16_t type, std::istream &typer)
     SDL_Delay( 8000);
 
     SDL_HapticDestroyEffect(haptic, effect_id);
-    SDL_Delay( 2000);
+    SDL_Delay( 3000);
 }
 
 static void create_periodic(SDL_HapticPeriodic &effect, std::istream &typer)
