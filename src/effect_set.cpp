@@ -5,10 +5,10 @@
 #include <SDL.h>
 #include <iostream>
 #include "effect_set.hpp"
+#include "common.hpp"
 
 static void create_periodic(SDL_HapticPeriodic &effect, std::istream &typer = std::cin);
 static void create_constant(SDL_HapticConstant &effect, std::istream &typer = std::cin);
-
 
 void create_effect(SDL_Haptic *haptic,uint16_t type, std::istream &typer)
 {
@@ -18,9 +18,10 @@ void create_effect(SDL_Haptic *haptic,uint16_t type, std::istream &typer)
     effect.type = type;
 
     /** Common fields **/
-    effect.custom.direction.type = SDL_HAPTIC_CARTESIAN;
-    typer >> effect.custom.direction.dir[0];
+    effect.periodic.direction.type = SDL_HAPTIC_CARTESIAN;
+    typer >> effect.periodic.direction.dir[0];
 
+    std::clog << effect.type;
     switch(type)
     {
         case SDL_HAPTIC_CONSTANT:
@@ -34,10 +35,14 @@ void create_effect(SDL_Haptic *haptic,uint16_t type, std::istream &typer)
             exit(0xff);
     }
 
-
+    std::cout << "Sono qua!\n";
     effect_id = SDL_HapticNewEffect( haptic, &effect );
-    SDL_HapticRunEffect( haptic, effect_id, 1 );
-    SDL_Delay( 30000);
+    if(effect_id == -1)
+        THROW_SDL_ERROR(std::cerr, -1);
+
+    if(SDL_HapticRunEffect( haptic, effect_id, 1 ))
+        THROW_SDL_ERROR(std::cerr, -1);
+    SDL_Delay( 10050);
     SDL_HapticDestroyEffect(haptic, effect_id);
 }
 

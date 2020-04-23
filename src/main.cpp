@@ -13,7 +13,10 @@ int main()
     SDL_HapticEffect effect = {0};
     uint16_t effect_code = 0;
 
-    if (SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC | SDL_INIT_GAMECONTROLLER | SDL_INIT_TIMER) < 0){
+    // Enable exc
+    std::cin.exceptions ( std::istream::failbit | std::istream::badbit );
+
+    if (SDL_Init(SDL_INIT_EVERYTHING) < 0){
         std::cerr << "Error initializing SDL!\n";
         return 1;
     }
@@ -51,21 +54,21 @@ int main()
 
     // Read effect, only one for the test!
     std::cin >> effect_code;
+    std::cout << effect_code;
     /*if(!(effect_code && !(effect_code & (effect_code-1))))
     {
         std::cerr << "I can only support 1 effect at the time :(\n";
         return 5;
     }*/
 
-    status = SDL_HapticEffectSupported(haptic, &effect);
-    if(status == SDL_FALSE)
+    if((SDL_HapticQuery(haptic) & effect_code)==0)
     {
         std::cerr << "The effected is not supported :/\n";
         return 6;
     }
-    if(status != SDL_TRUE)
-        THROW_SDL_ERROR(std::cerr, 6);
 
+    std::cin.ignore(256, '\n');
+    std::cin.ignore(256, '\n');
     while(! std::cin.eof())
     {
         create_effect(haptic, effect_code, std::cin);
