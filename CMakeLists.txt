@@ -1,0 +1,24 @@
+cmake_minimum_required(VERSION 3.1)
+project(ffb_tester)
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+
+# Write demo-config.h
+message("Generating header file: ${CMAKE_BINARY_DIR}/demo-config.h")
+set(DEMO_ENABLE_MULTISAMPLE 0 CACHE BOOL "Enable multisample anti-aliasing")
+
+# Find SDL2
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/modules")
+find_package(SDL2 REQUIRED COMPONENTS main)
+
+# Define executable target
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2main_INCLUDE_DIRS} ${CMAKE_BINARY_DIR})
+add_executable(CMakeDemo src/main.cpp src/effect_set.cpp)
+target_link_libraries(CMakeDemo ${SDL2_LIBS})
+
+# Copy SDL2 DLLs to output folder on Windows
+if(WIN32)
+    foreach(DLL ${SDL2_DLLS})
+        add_custom_command(TARGET CMakeDemo POST_BUILD COMMAND
+            ${CMAKE_COMMAND} -E copy_if_different ${DLL} $<TARGET_FILE_DIR:CMakeDemo>)
+    endforeach()
+endif()
