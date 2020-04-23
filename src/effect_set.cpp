@@ -1,3 +1,5 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "hicpp-signed-bitwise"
 //
 // Created by dario on 22/04/20.
 //
@@ -28,6 +30,10 @@ void create_effect(SDL_Haptic *haptic,uint16_t type, std::istream &typer)
             create_constant(effect.constant, typer);
             break;
         case SDL_HAPTIC_SINE:
+        case SDL_HAPTIC_TRIANGLE:
+        case SDL_HAPTIC_SAWTOOTHUP:
+        case SDL_HAPTIC_SAWTOOTHDOWN:
+        case SDL_HAPTIC_CUSTOM:
             create_periodic(effect.periodic, typer);
             break;
         default:
@@ -39,11 +45,14 @@ void create_effect(SDL_Haptic *haptic,uint16_t type, std::istream &typer)
     effect_id = SDL_HapticNewEffect( haptic, &effect );
     if(effect_id == -1)
         THROW_SDL_ERROR(std::cerr, -1);
+    SDL_Delay( 2000);
 
     if(SDL_HapticRunEffect( haptic, effect_id, 1 ))
         THROW_SDL_ERROR(std::cerr, -1);
-    SDL_Delay( 10050);
+    SDL_Delay( 8000);
+
     SDL_HapticDestroyEffect(haptic, effect_id);
+    SDL_Delay( 2000);
 }
 
 static void create_periodic(SDL_HapticPeriodic &effect, std::istream &typer)
@@ -74,3 +83,5 @@ static void create_constant(SDL_HapticConstant &effect, std::istream &typer)
 
     typer >> effect.level;
 }
+
+#pragma clang diagnostic pop
