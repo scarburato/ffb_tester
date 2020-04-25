@@ -15,7 +15,7 @@ int main()
     std::list<int> effects;
 
     // Enable exc
-    std::cin.exceptions (std::istream::failbit);
+    //std::cin.exceptions (std::istream::failbit);
 
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0){
         std::cerr << "Error initializing SDL!\n";
@@ -71,7 +71,10 @@ int main()
     std::cin.ignore(256, '\n');
     std::cin.ignore(256, '\n');
     while(! std::cin.eof())
+    {
         effects.push_back(create_effect(haptic, effect_code, std::cin));
+        std::cin.ignore(256, '\n');
+    }
 
     // Playing
     for(int i : effects)
