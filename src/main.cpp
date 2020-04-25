@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <iostream>
+#include <list>
 
 #include "common.hpp"
 #include "effect_set.hpp"
@@ -11,6 +12,7 @@ int main()
     SDL_Haptic *haptic = nullptr;
     SDL_HapticEffect effect = {0};
     uint16_t effect_code = 0;
+    std::list<int> effects;
 
     // Enable exc
     std::cin.exceptions (std::istream::failbit);
@@ -69,9 +71,16 @@ int main()
     std::cin.ignore(256, '\n');
     std::cin.ignore(256, '\n');
     while(! std::cin.eof())
-    {
-        create_effect(haptic, effect_code, std::cin);
-    }
+        effects.push_back(create_effect(haptic, effect_code, std::cin));
+
+    // Playing
+    for(int i : effects)
+        play_effect(haptic, i);
+
+    // Closing
+    for(int i : effects)
+        destroy_effect(haptic, i);
+
 
     // Closing
     SDL_HapticClose(haptic);

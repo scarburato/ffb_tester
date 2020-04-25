@@ -12,7 +12,7 @@
 static void create_periodic(SDL_HapticPeriodic &effect, std::istream &typer = std::cin);
 static void create_constant(SDL_HapticConstant &effect, std::istream &typer = std::cin);
 
-void create_effect(SDL_Haptic *haptic,uint16_t type, std::istream &typer)
+int create_effect(SDL_Haptic *haptic,uint16_t type, std::istream &typer)
 {
     SDL_HapticEffect effect = {0};
     int effect_id, iterations;
@@ -47,12 +47,21 @@ void create_effect(SDL_Haptic *haptic,uint16_t type, std::istream &typer)
     effect_id = SDL_HapticNewEffect( haptic, &effect );
     if(effect_id == -1)
         THROW_SDL_ERROR(std::cerr, -1);
+
     SDL_Delay( 2000);
 
-    if(SDL_HapticRunEffect( haptic, effect_id, 1 ))
+    return effect_id;
+}
+
+void play_effect(SDL_Haptic *haptic, int effect_id, unsigned int iterations)
+{
+    if(SDL_HapticRunEffect( haptic, effect_id, iterations ))
         THROW_SDL_ERROR(std::cerr, -1);
     SDL_Delay( 8000);
+}
 
+void destroy_effect(SDL_Haptic *haptic, int effect_id)
+{
     SDL_HapticDestroyEffect(haptic, effect_id);
     SDL_Delay( 3000);
 }
