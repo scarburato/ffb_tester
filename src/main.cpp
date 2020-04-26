@@ -12,14 +12,19 @@ int main(int argc, char const *const *const argv)
     SDL_Haptic *haptic = nullptr;
     SDL_HapticEffect effect = {0};
     uint16_t effect_code = 0;
+    uint16_t repeat = 1;
 
     std::list<int> effects;
     bool run = true;
     // Chek if I have to skip play
-    for(int i = 1; i < argc && run; i++)
-        if(std::string(argv[i]) == "--skip-play")
+    for(int i = 1; i < argc; i++)
+    {
+        const std::string arg(argv[i]);
+        if (arg == "-s" || arg == "--skip-play")
             run = false;
-
+        else if(arg[0] == '-' && arg[1] == 'r')
+            repeat = stoi(arg.substr(2,5));
+    }
     // Enable exc
     //std::cin.exceptions (std::istream::failbit);
 
@@ -85,7 +90,7 @@ int main(int argc, char const *const *const argv)
     // Playing
     if(run)
         for(int i : effects)
-            play_effect(haptic, i);
+            play_effect(haptic, i, repeat);
 
     // Closing
     for(int i : effects)
