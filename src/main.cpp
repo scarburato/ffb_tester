@@ -5,14 +5,20 @@
 #include "common.hpp"
 #include "effect_set.hpp"
 
-int main()
+int main(int argc, char const *const *const argv)
 {
     int sel = 0, n_joysticks = 0, status;
     SDL_Joystick *joy = nullptr;
     SDL_Haptic *haptic = nullptr;
     SDL_HapticEffect effect = {0};
     uint16_t effect_code = 0;
+
     std::list<int> effects;
+    bool run = true;
+    // Chek if I have to skip play
+    for(int i = 1; i < argc && run; i++)
+        if(std::string(argv[i]) == "--skip-play")
+            run = false;
 
     // Enable exc
     //std::cin.exceptions (std::istream::failbit);
@@ -77,13 +83,13 @@ int main()
     }
 
     // Playing
-    for(int i : effects)
-        play_effect(haptic, i);
+    if(run)
+        for(int i : effects)
+            play_effect(haptic, i);
 
     // Closing
     for(int i : effects)
         destroy_effect(haptic, i);
-
 
     // Closing
     SDL_HapticClose(haptic);

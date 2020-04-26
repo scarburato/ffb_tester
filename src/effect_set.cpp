@@ -25,7 +25,6 @@ int create_effect(SDL_Haptic *haptic,uint16_t type, std::istream &typer)
     effect.periodic.direction.type = SDL_HAPTIC_CARTESIAN;
     typer >> effect.periodic.direction.dir[0];
 
-    std::clog << effect.type;
     switch(type)
     {
         case SDL_HAPTIC_CONSTANT:
@@ -43,7 +42,6 @@ int create_effect(SDL_Haptic *haptic,uint16_t type, std::istream &typer)
             exit(0xff);
     }
 
-    std::cout << "Sono qua!\n";
     effect_id = SDL_HapticNewEffect( haptic, &effect );
     if(effect_id == -1)
         THROW_SDL_ERROR(std::cerr, -1);
@@ -78,6 +76,8 @@ static void create_periodic(SDL_HapticPeriodic &effect, std::istream &typer)
 
     typer >> effect.period;
     typer >> effect.magnitude;
+    typer >> effect.phase;
+    typer >> effect.offset;
     // offset
     // phase
 }
