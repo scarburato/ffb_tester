@@ -13,6 +13,7 @@ int main(int argc, char const *const *const argv)
     SDL_HapticEffect effect = {0};
     uint16_t effect_code = 0;
     uint16_t repeat = 1;
+    uint8_t gain = 0, autocenter = 0;
 
     std::list<int> effects;
     bool run = true;
@@ -24,6 +25,10 @@ int main(int argc, char const *const *const argv)
             run = false;
         else if(arg[0] == '-' && arg[1] == 'r')
             repeat = stoi(arg.substr(2,5));
+        else if(arg[0] == '-' && arg[1] == 'g')
+            gain = stoi(arg.substr(2,5));
+        else if(arg[0] == '-' && arg[1] == 'c')
+            autocenter = stoi(arg.substr(2,5));
     }
     // Enable exc
     //std::cin.exceptions (std::istream::failbit);
@@ -64,9 +69,15 @@ int main(int argc, char const *const *const argv)
     if (!haptic)
         THROW_SDL_ERROR(std::cerr, 4);
 
+    // Now set gain
+    if(SDL_HapticSetGain(haptic, gain))
+        THROW_SDL_ERROR(std::cerr, 5);
+
+    if(SDL_HapticSetAutocenter(haptic, autocenter))
+        THROW_SDL_ERROR(std::cerr, 6);
+
     // Read effect, only one for the test!
     std::cin >> effect_code;
-    std::cout << effect_code;
     /*if(!(effect_code && !(effect_code & (effect_code-1))))
     {
         std::cerr << "I can only support 1 effect at the time :(\n";
@@ -90,7 +101,10 @@ int main(int argc, char const *const *const argv)
     // Playing
     if(run)
         for(int i : effects)
+        {
+            std::clog << "Now playing effect n° " << i << std::endl;
             play_effect(haptic, i, repeat);
+        }
 
     // Closing
     for(int i : effects)

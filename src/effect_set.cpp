@@ -61,7 +61,7 @@ void play_effect(SDL_Haptic *haptic, int effect_id, unsigned int iterations)
 void destroy_effect(SDL_Haptic *haptic, int effect_id)
 {
     SDL_HapticDestroyEffect(haptic, effect_id);
-    SDL_Delay( 3000);
+    //SDL_Delay( 3000);
 }
 
 static void create_periodic(SDL_HapticPeriodic &effect, std::istream &typer)
