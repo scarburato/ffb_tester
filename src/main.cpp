@@ -13,7 +13,7 @@ int main(int argc, char const *const *const argv)
     SDL_HapticEffect effect = {0};
     uint16_t effect_code = 0;
     uint16_t repeat = 1;
-    uint8_t gain = 0, autocenter = 0;
+    uint8_t gain = 100, autocenter = 0;
 
     std::list<int> effects;
     bool run = true;
@@ -73,8 +73,8 @@ int main(int argc, char const *const *const argv)
     if(SDL_HapticSetGain(haptic, gain))
         THROW_SDL_ERROR(std::cerr, 5);
 
-    if(SDL_HapticSetAutocenter(haptic, autocenter))
-        THROW_SDL_ERROR(std::cerr, 6);
+    //if(SDL_HapticSetAutocenter(haptic, autocenter))
+    //    THROW_SDL_ERROR(std::cerr, 6);
 
     // Read effect, only one for the test!
     std::cin >> effect_code;
