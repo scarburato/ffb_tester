@@ -1,0 +1,3 @@
+0 2
+# dir   delay       length      attack_length   attack_level    fade_length fade_level  period      magnitude   phase   offset
+1       0           2500        1000            170             1000        187         1000        20000       18000   5000

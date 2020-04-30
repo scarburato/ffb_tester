@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <iostream>
 #include <list>
+#include <string>
 
 #include "common.hpp"
 #include "effect_set.hpp"
