@@ -12,7 +12,7 @@
 static void create_periodic(SDL_HapticPeriodic &effect, std::istream &typer = std::cin);
 static void create_constant(SDL_HapticConstant &effect, std::istream &typer = std::cin);
 
-void create_spring(SDL_HapticCustom periodic, std::istream &istream);
+void create_spring(SDL_HapticCondition &periodic, std::istream &istream);
 
 int create_effect(SDL_Haptic *haptic, uint16_t type, std::istream &typer)
 {
@@ -40,7 +40,7 @@ int create_effect(SDL_Haptic *haptic, uint16_t type, std::istream &typer)
             create_periodic(effect.periodic, typer);
             break;
         case SDL_HAPTIC_SPRING:
-            create_spring(effect.constant, typer);
+            create_spring(effect.condition, typer);
             break;
         default:
             std::cerr << "Invalid!";
