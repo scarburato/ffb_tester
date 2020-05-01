@@ -12,7 +12,9 @@
 static void create_periodic(SDL_HapticPeriodic &effect, std::istream &typer = std::cin);
 static void create_constant(SDL_HapticConstant &effect, std::istream &typer = std::cin);
 
-int create_effect(SDL_Haptic *haptic,uint16_t type, std::istream &typer)
+void create_spring(SDL_HapticCustom periodic, std::istream &istream);
+
+int create_effect(SDL_Haptic *haptic, uint16_t type, std::istream &typer)
 {
     SDL_HapticEffect effect = {0};
     int effect_id, iterations;
@@ -34,8 +36,11 @@ int create_effect(SDL_Haptic *haptic,uint16_t type, std::istream &typer)
         case SDL_HAPTIC_TRIANGLE:
         case SDL_HAPTIC_SAWTOOTHUP:
         case SDL_HAPTIC_SAWTOOTHDOWN:
-        case SDL_HAPTIC_CUSTOM:
+        //case SDL_HAPTIC_CUSTOM:
             create_periodic(effect.periodic, typer);
+            break;
+        case SDL_HAPTIC_SPRING:
+            create_spring(effect.constant, typer);
             break;
         default:
             std::cerr << "Invalid!";
@@ -62,6 +67,19 @@ void destroy_effect(SDL_Haptic *haptic, int effect_id)
 {
     SDL_HapticDestroyEffect(haptic, effect_id);
     //SDL_Delay( 3000);
+}
+
+void create_spring(SDL_HapticCondition &effect, std::istream &typer)
+{
+    // Commons
+    typer >> effect.delay;
+    typer >> effect.length;
+    typer >> effect.right_sat[0];
+    typer >> effect.left_sat[0];
+    typer >> effect.right_coeff[0];
+    typer >> effect.left_coeff[0];
+    typer >> effect.deadband[0];
+    typer >> effect.center[0];
 }
 
 static void create_periodic(SDL_HapticPeriodic &effect, std::istream &typer)
