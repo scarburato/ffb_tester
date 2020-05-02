@@ -40,6 +40,7 @@ int create_effect(SDL_Haptic *haptic, uint16_t type, std::istream &typer)
             create_periodic(effect.periodic, typer);
             break;
         case SDL_HAPTIC_SPRING:
+        case SDL_HAPTIC_FRICTION:
             create_spring(effect.condition, typer);
             break;
         default:
