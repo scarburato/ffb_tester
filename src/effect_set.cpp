@@ -42,6 +42,7 @@ int create_effect(SDL_Haptic *haptic, uint16_t type, std::istream &typer)
         case SDL_HAPTIC_SPRING:
         case SDL_HAPTIC_FRICTION:
         case SDL_HAPTIC_DAMPER:
+        case SDL_HAPTIC_INERTIA:
             create_spring(effect.condition, typer);
             break;
         default:
