@@ -10,13 +10,13 @@
 #include "common.hpp"
 
 static void create_periodic(SDL_HapticPeriodic &effect, std::istream &typer = std::cin);
+
 static void create_constant(SDL_HapticConstant &effect, std::istream &typer = std::cin);
 
 void create_spring(SDL_HapticCondition &periodic, std::istream &istream);
 
-int create_effect(SDL_Haptic *haptic, uint16_t type, std::istream &typer)
+int create_effect(SDL_Haptic *haptic, uint16_t type, std::istream &typer, SDL_HapticEffect &effect)
 {
-    SDL_HapticEffect effect = {0};
     int effect_id, iterations;
 
     //typer >> iterations;
@@ -25,9 +25,9 @@ int create_effect(SDL_Haptic *haptic, uint16_t type, std::istream &typer)
 
     /** Common fields **/
     effect.periodic.direction.type = SDL_HAPTIC_CARTESIAN;
-    typer >> effect.periodic.direction.dir[1];
+    typer >> effect.periodic.direction.dir[0];
 
-    switch(type)
+    switch (type)
     {
         case SDL_HAPTIC_CONSTANT:
             create_constant(effect.constant, typer);
@@ -36,7 +36,7 @@ int create_effect(SDL_Haptic *haptic, uint16_t type, std::istream &typer)
         case SDL_HAPTIC_TRIANGLE:
         case SDL_HAPTIC_SAWTOOTHUP:
         case SDL_HAPTIC_SAWTOOTHDOWN:
-        //case SDL_HAPTIC_CUSTOM:
+            //case SDL_HAPTIC_CUSTOM:
             create_periodic(effect.periodic, typer);
             break;
         case SDL_HAPTIC_SPRING:
@@ -50,20 +50,20 @@ int create_effect(SDL_Haptic *haptic, uint16_t type, std::istream &typer)
             exit(0xff);
     }
 
-    effect_id = SDL_HapticNewEffect( haptic, &effect );
-    if(effect_id == -1)
-        THROW_SDL_ERROR(std::cerr, -1);
+    effect_id = SDL_HapticNewEffect(haptic, &effect);
+    if (effect_id == -1)
+    THROW_SDL_ERROR(std::cerr, -1);
 
-    SDL_Delay( 2000);
+    SDL_Delay(2000);
 
     return effect_id;
 }
 
 void play_effect(SDL_Haptic *haptic, int effect_id, unsigned int iterations)
 {
-    if(SDL_HapticRunEffect( haptic, effect_id, iterations ))
-        THROW_SDL_ERROR(std::cerr, -1);
-    SDL_Delay( 8000);
+    if (SDL_HapticRunEffect(haptic, effect_id, iterations))
+    THROW_SDL_ERROR(std::cerr, -1);
+    SDL_Delay(8000);
 }
 
 void destroy_effect(SDL_Haptic *haptic, int effect_id)

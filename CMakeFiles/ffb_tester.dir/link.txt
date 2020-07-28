@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/ffb_tester.dir/src/main.cpp.o CMakeFiles/ffb_tester.dir/src/effect_set.cpp.o  -o ffb_tester -rdynamic -lSDL2 

@@ -1,0 +1,63 @@
+main{
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+#sdlEffects {
+    height: 100px;
+    flex: 1;
+    background: aqua;
+}
+
+#usbPackets {
+    height: 100px;
+    flex: 1;
+    background: yellow;
+}
+
+/*****************************************************
+ Pulsanti e bottoni
+ */
+.button, button {
+    border-style: outset;
+    background-color: white;
+    border-color: #dbdbdb;
+    border-width: 1px;
+    color: #363636;
+    cursor: pointer;
+    justify-content: center;
+    padding: calc(0.5em - 1px) 1em;
+    text-align: center;
+    text-decoration: none;
+    font-size: calc(13px + 1px/3 );
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.button:hover, button:hover , .button.is-hovered, button.is-hovered {
+    background-color: #dbdbdb;
+    border-color: #b5b5b5;
+    color: #363636;
+}
+
+
+.button:focus, button:focus, .button.is-focused {
+    border-color: #3273dc;
+    color: #363636;
+}
+
+.button:active, button:active, .button.is-active {
+    border-color: #4a4a4a;
+    color: #363636;
+}
+
+.button.disabled, button[disabled],
+fieldset[disabled] .button {
+    cursor: not-allowed;
+
+    background-color: white;
+    border-color: #dbdbdb;
+    box-shadow: none;
+    opacity: 0.5;
+}
