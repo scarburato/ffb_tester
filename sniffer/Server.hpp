@@ -5,20 +5,19 @@
 #ifndef FFB_TESTER_SERVER_HPP
 #define FFB_TESTER_SERVER_HPP
 
-#include <sys/socket.h>
-#include <netinet/in.h>
-
+#include <SDL_net.h>
 #include "../common/inet_states.h"
 
 class Server
 {
 private:
-    int socketId;
-    sockaddr_in address;
+    TCPsocket mySocket;
+    IPaddress myIp = {0};
 
-    int socketClient;
+    TCPsocket clientSocket;
 public:
     Server();
+    ~Server();
 
     ClientStatus readEvent();
 

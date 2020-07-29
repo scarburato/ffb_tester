@@ -10,61 +10,67 @@
 
 Server::Server()
 {
-    int status;
-    sockaddr clientAddress;
-    socklen_t clientAddressLen;
+    int ret;
 
-    socketId = socket(AF_INET, SOCK_STREAM, 0);
+    ret = SDLNet_ResolveHost(&myIp, nullptr,DEFAULT_SERVER_PORT);
+    if(ret == -1)
+        throw std::runtime_error(SDLNet_GetError());
 
-    if (socketId == -1)
-        throw std::runtime_error("Unable to open a socket!");
+    mySocket = SDLNet_TCP_Open(&myIp);
+    if(!mySocket)
+        throw std::runtime_error(SDLNet_GetError());
 
-    address.sin_family = AF_INET,
-            address.sin_port = htons(DEFAULT_SERVER_PORT);
-    address.sin_addr.s_addr = INADDR_ANY;
-    status = bind(socketId, (sockaddr *) &address, sizeof(sockaddr_in));
-    if (status == -1)
-        throw std::runtime_error("Unable to bind IP address");
+    std::clog << "Waiting for connection...\n";
+    do
+    {
+        clientSocket = SDLNet_TCP_Accept(mySocket);
+        usleep(1000);
+    }
+    while (!clientSocket);
 
-    listen(socketId, 1);
+    std::clog << "Connection opened\n";
+    //if(!clientSocket)
+    //    throw std::runtime_error(SDLNet_GetError());
+}
 
-    std::clog << "Waiting for a connection...\n";
-    socketClient = accept(socketId, &clientAddress, &clientAddressLen);
-
-    if (socketClient == -1)
-        throw std::runtime_error("Error while accepting a connection");
-
-    std::clog << "Opened connection to ";
-
-    for (int i = 0; i < 4; i++)
-        std::clog << (unsigned short) clientAddress.sa_data[i + 3] << '.';
-
-    std::clog << std::endl;
+Server::~Server()
+{
+    SDLNet_TCP_Close(clientSocket);
+    SDLNet_TCP_Close(mySocket);
 }
 
 ClientStatus Server::readEvent()
 {
     uint16_t buffer = 0;
-    read(socketClient, &buffer, packet_size);
+    int ret = SDLNet_TCP_Recv(clientSocket, &buffer, packet_size);
+
+    if(ret <= 0)
+        throw std::runtime_error(SDL_GetError());
+
     return (ClientStatus) buffer;
 }
 
 void Server::sendEvent(ServerStatus status)
 {
-    write(socketClient, &status, packet_size);
+    int ret = SDLNet_TCP_Send(clientSocket, &status, packet_size);
+    if(ret <= 0)
+        throw std::runtime_error(SDL_GetError());
 }
 
 std::string Server::readEffect()
 {
     char *buffer = nullptr;
     uint64_t size = 0;
+    int code;
 
-    read(socketClient, &size, sizeof(uint64_t));
+    code = SDLNet_TCP_Recv(clientSocket, &size, sizeof(uint64_t));
+    if(code <= 0)
+        throw std::runtime_error(SDL_GetError());
 
     buffer = new char[size];
-
-    read(socketClient, buffer, size);
-
+    code = SDLNet_TCP_Recv(clientSocket, buffer, size);
+    if(code <= 0)
+        throw std::runtime_error(SDL_GetError());
 
     std::string ret(buffer);
     delete buffer;

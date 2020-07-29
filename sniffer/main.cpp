@@ -1,9 +1,18 @@
 #include <iostream>
+#include <SDL.h>
+#include <SDL_net.h>
+
 #include "Sniffer.h"
 #include "Server.hpp"
 
 int main(int argc, char *argv[])
 {
+    if(SDL_Init(0)==-1)
+        throw std::runtime_error(SDL_GetError());
+
+    if(SDLNet_Init()==-1)
+        throw std::runtime_error(SDLNet_GetError());
+
     Sniffer usbmon(argc >= 2 ? argv[1] : "usbmon0");
     Server server;
 

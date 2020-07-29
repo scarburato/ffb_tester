@@ -5,6 +5,9 @@ set (CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/modules")
 
+# Find SDL2
+find_package(SDL2 REQUIRED COMPONENTS main)
+find_package(SDL2_net REQUIRED COMPONENTS main)
 
 ###################################################################
 #           SNIFFER                                               #
@@ -14,19 +17,18 @@ if(NOT WIN32)
     find_package(PCAP REQUIRED)
     find_package(Threads REQUIRED)
 
+    include_directories(${SDL2_NET_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS} ${SDL2main_INCLUDE_DIRS})
     add_executable(sniffer sniffer/main.cpp sniffer/Sniffer.cpp sniffer/Server.cpp)
-    target_link_libraries(sniffer ${PCAP_LIBRARY} Threads::Threads)
+    target_link_libraries(sniffer ${PCAP_LIBRARY} ${SDL2_LIBS} ${SDL2_NET_LIBRARIES} Threads::Threads)
 endif()
 
 ####################################################################
 #           SENDER                                                #
-# Find SDL2
-find_package(SDL2 REQUIRED COMPONENTS main)
 
 # Define executable target
 include_directories(${SDL2_INCLUDE_DIRS} ${SDL2main_INCLUDE_DIRS} ${CMAKE_BINARY_DIR})
 add_executable(sender sender/main.cpp sender/Client.cpp sender/effect_set.cpp)
-target_link_libraries(sender ${SDL2_LIBS})
+target_link_libraries(sender ${SDL2_LIBS} ${SDL2_NET_LIBRARIES})
 
 # Copy SDL2 DLLs to output folder on Windows
 if(WIN32)

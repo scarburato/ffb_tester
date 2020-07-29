@@ -3,54 +3,37 @@
 //
 
 #include <stdexcept>
-#include <netdb.h>
-#include <strings.h>
-#include <zconf.h>
 #include <sstream>
 #include "Client.hpp"
 
 Client::Client(const std::string &serverAddress)
 {
-    int status;
+    int ret;
 
-    socketId = socket(AF_INET, SOCK_STREAM, 0);
+    ret = SDLNet_ResolveHost(&serverIp, serverAddress.c_str(), DEFAULT_SERVER_PORT);
+    if(ret == -1)
+        throw std::runtime_error(SDLNet_GetError());
 
-    if (socketId == -1)
-        throw std::runtime_error("Unable to open a socket!");
-
-    sockaddr_in temp = {0};
-    temp.sin_family = AF_INET;
-    temp.sin_port = htons(DEFAULT_SERVER_PORT);
-
-    hostent *h = gethostbyname(serverAddress.c_str());
-
-    if (!h)
-        throw std::runtime_error("gethostname() failed");
-
-    bcopy(h->h_addr, &temp.sin_addr, h->h_length);
-
-    // Conessione
-    status = connect(socketId, (sockaddr *) &(temp), sizeof(temp));
-
-    if (status == -1)
-        throw std::runtime_error("Unable to connect to the server");
+    socket = SDLNet_TCP_Open(&serverIp);
+    if(!socket)
+        throw std::runtime_error(SDLNet_GetError());
 }
 
 Client::~Client()
 {
-    close(socketId);
+    SDLNet_TCP_Close(socket);
 }
 
 ServerStatus Client::readEvent()
 {
     uint16_t buffer = 0;
-    read(socketId, &buffer, packet_size);
+    SDLNet_TCP_Recv(socket, &buffer, packet_size);
     return (ServerStatus) buffer;
 }
 
 void Client::sendEvent(ClientStatus status)
 {
-    write(socketId, &status, packet_size);
+    SDLNet_TCP_Send(socket, &status, packet_size);
 }
 
 void Client::sendEffect(const SDL_HapticEffect &toSent)
@@ -61,9 +44,9 @@ void Client::sendEffect(const SDL_HapticEffect &toSent)
 
     // Sent the length of the string
     uint64_t size = serString.length() + 1;
-    write(socketId, &size, sizeof(uint64_t));
+    SDLNet_TCP_Send(socket, &size, sizeof(uint64_t));
 
     // sent the string
-    write(socketId, serString.c_str(), size);
+    SDLNet_TCP_Send(socket, serString.c_str(), size);
 }
 

@@ -13,7 +13,33 @@ main{
 #usbPackets {
     height: 100px;
     flex: 1;
-    background: yellow;
+    /*background: yellow;*/
+}
+
+/*****************************************************
+ Packet dump
+ */
+
+.packetDump{
+    font-family: monospace;
+    font-size: 2.5em;
+}
+
+.packetDump th, td{
+    padding-right: 0.25em;
+}
+
+.packetDump td:nth-child(2n+1) {
+    color: #717171;
+}
+
+.packetDump td::selection {
+    color: red;
+    background: lightgoldenrodyellow;
+}
+
+.packetDump th:nth-child(9), td:nth-child(9){
+    padding-right: 1em;
 }
 
 /*****************************************************
