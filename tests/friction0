@@ -1,4 +1,4 @@
-0 256
+0 1024
 # dir   delay   length  right_sat   left_sat    right_coeff left_coeff  deadband    center
 1       0       3000    65535       65535       32767       32767       0           0
 1       0       3000    255         255         32767       32767       1023        0

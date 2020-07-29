@@ -7,6 +7,10 @@
 
 #undef main
 
+#ifdef WIN32
+#define __always_inline inline
+#endif
+
 #define THROW_SDL_ERROR(printer, exit_code) {        \
     printer << SDL_GetError() << std::endl;          \
     exit(exit_code);                                 \

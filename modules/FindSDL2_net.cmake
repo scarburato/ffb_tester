@@ -29,27 +29,33 @@
 find_package(PkgConfig QUIET)
 pkg_check_modules(PC_SDL2_NET QUIET SDL2_net)
 
-find_path(SDL2_NET_INCLUDE_DIR
-  NAMES SDL_net.h
-  HINTS
-    ${PC_SDL2_NET_INCLUDEDIR}
-    ${PC_SDL2_NET_INCLUDE_DIRS}
-    /Library/Frameworks
-    ../extern
-  PATH_SUFFIXES SDL2
-)
+if(WIN32)
+  set(SDL2_NET_INCLUDE_DIR ./extern/SDL2_net-2.0.1/include)
+else()
+  find_path(SDL2_NET_INCLUDE_DIR
+    NAMES SDL_net.h
+    HINTS
+      ${PC_SDL2_NET_INCLUDEDIR}
+      ${PC_SDL2_NET_INCLUDE_DIRS}
+      /Library/Frameworks
+    PATH_SUFFIXES SDL2
+  )
+endif()
 
 MESSAGE("SDL2_NET_INCLUDE_DIR is ${SDL2_NET_INCLUDE_DIR}")
 
-find_library(SDL2_NET_LIBRARY
-  NAMES SDL2_net
-  HINTS
-    ${PC_SDL2_NET_LIBDIR}
-    ${PC_SDL2_NET_LIBRARY_DIRS}
-    /Library/Frameworks
-    ../extern
-  PATH_SUFFIXES x64 x86
-)
+if(WIN32)
+  set(SDL2_NET_LIBRARY ..\\extern\\SDL2_net-2.0.1\\lib\\x64\\SDL2_net)
+else()
+  find_library(SDL2_NET_LIBRARY
+    NAMES SDL2_net
+    HINTS
+      ${PC_SDL2_NET_LIBDIR}
+      ${PC_SDL2_NET_LIBRARY_DIRS}
+      /Library/Frameworks
+    PATH_SUFFIXES x64 x86
+  )
+endif()
 
 if(SDL2_NET_INCLUDE_DIR AND EXISTS "${SDL2_NET_INCLUDE_DIR}/SDL_net.h")
   file(STRINGS "${SDL2_NET_INCLUDE_DIR}/SDL_net.h" SDL2_NET_VERSION_MAJOR_LINE REGEX "^#define[ \t]+SDL_NET_MAJOR_VERSION[ \t]+[0-9]+$")

@@ -26,7 +26,7 @@ endif()
 #           SENDER                                                #
 
 # Define executable target
-include_directories(${SDL2_INCLUDE_DIRS} ${SDL2main_INCLUDE_DIRS} ${CMAKE_BINARY_DIR})
+include_directories(  ${SDL2_INCLUDE_DIRS} ${SDL2main_INCLUDE_DIRS} ${SDL2_NET_INCLUDE_DIRS} ${CMAKE_BINARY_DIR})
 add_executable(sender sender/main.cpp sender/Client.cpp sender/effect_set.cpp)
 target_link_libraries(sender ${SDL2_LIBS} ${SDL2_NET_LIBRARIES})
 

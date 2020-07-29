@@ -7,7 +7,7 @@
 #include <SDL.h>
 #include <iostream>
 #include "effect_set.hpp"
-#include "common.hpp"
+
 
 static void create_periodic(SDL_HapticPeriodic &effect, std::istream &typer = std::cin);
 

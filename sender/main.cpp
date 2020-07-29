@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <list>
+#include <string>
 #include "Client.hpp"
 #include "common.hpp"
 #include "effect_set.hpp"
@@ -34,16 +35,24 @@ int main(int argc, char *argv[])
             serverAddr = argv[i] + 2;
     }
 
-    Client client(serverAddr ? serverAddr : "127.0.0.1");
-
-    // Enable exc
-    //std::cin.exceptions (std::istream::failbit);
-
+    std::clog << serverAddr << '\n';
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
     {
         std::cerr << "Error initializing SDL!\n";
         return 1;
     }
+    if(SDLNet_Init() == -1)
+    {
+        std::cerr << "Error initializing SDL_net!\n";
+        return 1;
+    }
+
+    Client client(serverAddr ? serverAddr : "127.0.0.1");
+
+    // Enable exc
+    //std::cin.exceptions (std::istream::failbit);
+
+
     n_joysticks = SDL_NumJoysticks();
     if (!n_joysticks)
     {
@@ -81,8 +90,8 @@ int main(int argc, char *argv[])
     std::cout << "Supported effects: " << std::hex << effectsSupported << std::dec << '\n';
 
     // Now set gain to the maximun
-    if (SDL_HapticSetGain(haptic, gain))
-    THROW_SDL_ERROR(std::cerr, 5);
+    //if (SDL_HapticSetGain(haptic, gain))
+    //THROW_SDL_ERROR(std::cerr, 5);
 
     // Read effect, only one for the test!
     std::cin >> effect_code;
