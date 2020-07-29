@@ -20,3 +20,4 @@ os.chdir(externFolder)
 
 # SDL2
 downloadZip('https://www.libsdl.org/release/SDL2-devel-2.0.5-VC.zip', 'SDL2-2.0.5')
+downloadZip('https://www.libsdl.org/projects/SDL_net/release/SDL2_net-devel-2.0.1-VC.zip', 'SDL2_net-2.0.1')

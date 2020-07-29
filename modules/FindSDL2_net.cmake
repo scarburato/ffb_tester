@@ -35,6 +35,7 @@ find_path(SDL2_NET_INCLUDE_DIR
     ${PC_SDL2_NET_INCLUDEDIR}
     ${PC_SDL2_NET_INCLUDE_DIRS}
     /Library/Frameworks
+    ../extern
   PATH_SUFFIXES SDL2
 )
 
@@ -46,6 +47,7 @@ find_library(SDL2_NET_LIBRARY
     ${PC_SDL2_NET_LIBDIR}
     ${PC_SDL2_NET_LIBRARY_DIRS}
     /Library/Frameworks
+    ../extern
   PATH_SUFFIXES x64 x86
 )
 
