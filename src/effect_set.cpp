@@ -25,7 +25,7 @@ int create_effect(SDL_Haptic *haptic, uint16_t type, std::istream &typer)
 
     /** Common fields **/
     effect.periodic.direction.type = SDL_HAPTIC_CARTESIAN;
-    typer >> effect.periodic.direction.dir[1];
+    typer >> effect.periodic.direction.dir[0];
 
     switch(type)
     {
